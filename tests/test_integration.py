@@ -149,4 +149,7 @@ def test_patch_not_allowed(client):
 
 
 def test_database_connection(client):
-    assert db.session.execute("SELECT 1")
+    with client.application.app_context():  # Push the app context
+        result = db.session.execute("SELECT 1")
+        assert result is not None
+
