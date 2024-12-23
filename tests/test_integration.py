@@ -146,3 +146,7 @@ def test_patch_not_allowed(client):
     })
     assert response.status_code == 405
     assert response.get_json() == {"error": "PATCH method not allowed"}
+
+
+def test_database_connection(client):
+    assert db.session.execute("SELECT 1")
