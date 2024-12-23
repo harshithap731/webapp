@@ -12,14 +12,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      db:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: testdb
+    # services:
+      # db:
+      #   image: mysql:8.0
+      #   ports:
+      #     - 3306:3306
+      #   env:
+      #     MYSQL_ROOT_PASSWORD: password
+      #     MYSQL_DATABASE: testdb
 
     steps:
       - name: Checkout code
@@ -35,9 +35,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run database migrations
-        run: |
-          flask db upgrade
+      # - name: Run database migrations
+      #   run: |
+      #     flask db upgrade
 
       - name: Run tests
         env:
