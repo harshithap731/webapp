@@ -3,7 +3,7 @@ name: Packer Build
 on:
   pull_request:
     paths:
-      - "packer.json"
+      - "packer/packer.json"
 
 jobs:
   validate-and-build:
