@@ -2,9 +2,7 @@
 {
   "variables": {
     "aws_region": "us-east-1",
-    "source_ami": "ami-0ca9fb66e076a6e32", // Replace with the Debian 12 AMI ID
-    
-    
+    "source_ami": "ami-0ca9fb66e076a6e32",
     "instance_type": "t2.micro"
   },
   "builders": [
