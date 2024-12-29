@@ -15,7 +15,7 @@ jobs:
       - name: Run Packer Format Check
         id: packer_fmt
         run: |
-          packer fmt -check packer.json || exit 1
+          packer fmt -check packer/packer.json || exit 1
 
       - name: Validate Packer Template
         run: packer validate packer.json
@@ -28,7 +28,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "us-east-1"
         run: |
-          packer build packer.json | tee packer-output.log
+          packer build packer/packer.json | tee packer-output.log
           AMI_ID=$(grep -oP '(ami-[a-zA-Z0-9]+)' packer-output.log | tail -1)
           echo "::set-output name=ami_id::$AMI_ID"
 
