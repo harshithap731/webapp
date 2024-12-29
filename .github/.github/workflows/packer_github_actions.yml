@@ -1,0 +1,40 @@
+name: Packer Build
+
+on:
+  pull_request:
+    paths:
+      - "packer.json"
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Packer Format Check
+        id: packer_fmt
+        run: |
+          packer fmt -check packer.json || exit 1
+
+      - name: Validate Packer Template
+        run: packer validate packer.json
+
+      - name: Build Packer AMI (Only on Merge)
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        id: build-ami
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "us-east-1"
+        run: |
+          packer build packer.json | tee packer-output.log
+          AMI_ID=$(grep -oP '(ami-[a-zA-Z0-9]+)' packer-output.log | tail -1)
+          echo "::set-output name=ami_id::$AMI_ID"
+
+      - name: Store AMI ID in GitHub Secrets
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh secret set PACKER_AMI_ID -b "${{ steps.build-ami.outputs.ami_id }}"

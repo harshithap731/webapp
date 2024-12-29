@@ -1,0 +1,47 @@
+
+{
+  "variables": {
+    "aws_region": "us-east-1",
+    "source_ami": "ami-0ca9fb66e076a6e32", // Replace with the Debian 12 AMI ID
+    
+    
+    "instance_type": "t2.micro"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "{{user `aws_region`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "instance_type": "{{user `instance_type`}}",
+      "ssh_username": "admin",
+      "ami_name": "csye6225-custom-ami-{{timestamp}}",
+      "ami_description": "Custom Debian 12 AMI for CSYE6225 Assignment",
+      "associate_public_ip_address": true,
+      "tags": {
+        "Name": "csye6225-custom-ami"      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get update",
+        "sudo apt-get install -y mysql-server",
+        "sudo systemctl enable mysql",
+        "sudo systemctl start mysql"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "webapp.zip",
+      "destination": "/tmp/webapp.zip"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "unzip /tmp/webapp.zip -d /var/www/application",
+        "sudo systemctl restart apache2"
+      ]
+    }
+  ]
+}
