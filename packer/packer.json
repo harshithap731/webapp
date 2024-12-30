@@ -15,7 +15,8 @@
       "ami_description": "Custom Debian 12 AMI for CSYE6225 Assignment",
       "associate_public_ip_address": true,
       "tags": {
-        "Name": "csye6225-custom-ami"      }
+        "Name": "csye6225-custom-ami"
+      }
     }
   ],
   "provisioners": [
