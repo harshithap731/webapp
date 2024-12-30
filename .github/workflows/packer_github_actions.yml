@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - "packer/packer.pkr.hcl"
+  push:
+    branches:
+      - main
 
 jobs:
   validate-and-build:
