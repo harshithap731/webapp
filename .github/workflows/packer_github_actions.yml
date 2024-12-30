@@ -20,9 +20,8 @@ jobs:
       - name: Install Packer Plugins
         run: |
           mkdir -p ~/.packer.d/plugins
-          curl -Lo ~/.packer.d/plugins/packer-plugin-amazon-ebs.zip https://releases.hashicorp.com/packer-plugin-amazon-ebs/1.2.1/packer-plugin-amazon-ebs_1.2.1_linux_amd64.zip
-          unzip ~/.packer.d/plugins/packer-plugin-amazon-ebs.zip -d ~/.packer.d/plugins/
-          rm ~/.packer.d/plugins/packer-plugin-amazon-ebs.zip
+          curl -L https://releases.hashicorp.com/packer-plugin-amazon-ebs/1.2.1/packer-plugin-amazon-ebs_1.2.1_linux_amd64 -o ~/.packer.d/plugins/packer-plugin-amazon-ebs
+          chmod +x ~/.packer.d/plugins/packer-plugin-amazon-ebs
 
       - name: Force Format File
         run: packer fmt packer/packer.pkr.hcl
