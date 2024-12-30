@@ -3,7 +3,7 @@ name: Packer Build
 on:
   pull_request:
     paths:
-      - "packer/packer.json"
+      - "packer/packer.pkr.hcl"
 
 jobs:
   validate-and-build:
@@ -15,10 +15,10 @@ jobs:
       - name: Run Packer Format Check
         id: packer_fmt
         run: |
-          packer fmt -check packer/packer.json || exit 1
+          packer fmt -check packer/packer.pkr.hcl || exit 1
 
       - name: Validate Packer Template
-        run: packer validate packer.json
+        run: packer validate packer/packer.pkr.hcl
 
       - name: Build Packer AMI (Only on Merge)
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
