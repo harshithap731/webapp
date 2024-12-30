@@ -17,13 +17,13 @@ jobs:
         with:
             version: 1.11.2
 
+      - name: Force Format File
+        run: packer fmt packer/packer.pkr.hcl
+
       - name: Run Packer Format Check
         id: packer_fmt
         run: |
           packer fmt -check packer/packer.pkr.hcl || exit 1
-
-      - name: Force Format File
-        run: packer fmt packer/packer.pkr.hcl
 
       - name: Validate Packer Template
         run: packer validate packer/packer.pkr.hcl
