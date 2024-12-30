@@ -24,7 +24,7 @@ source "amazon-ebs" "example" {
   source_ami             = var.source_ami
   instance_type          = var.instance_type
   ssh_username           = "admin"
-  ami_name               = "csye6225-custom-ami-${timestamp()}"
+  ami_name               = "csye6225-custom-ami"
   ami_description        = "Custom Debian 12 AMI for CSYE6225 Assignment"
   associate_public_ip_address = true
 
