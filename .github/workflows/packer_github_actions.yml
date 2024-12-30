@@ -15,13 +15,14 @@ jobs:
       - name: Setup Packer
         uses: hashicorp/setup-packer@v2
         with:
-            version: 1.11.2
+          version: "latest"
 
       - name: Install Packer Plugins
         run: |
           mkdir -p ~/.packer.d/plugins
-          curl -Lo ~/.packer.d/plugins/packer-plugin-amazon-ebs https://releases.hashicorp.com/packer-plugin-amazon-ebs/1.1.0/packer-plugin-amazon-ebs_1.1.0_linux_amd64.zip
-          unzip ~/.packer.d/plugins/packer-plugin-amazon-ebs -d ~/.packer.d/plugins/
+          curl -Lo ~/.packer.d/plugins/packer-plugin-amazon-ebs.zip https://releases.hashicorp.com/packer-plugin-amazon-ebs/1.2.1/packer-plugin-amazon-ebs_1.2.1_linux_amd64.zip
+          unzip ~/.packer.d/plugins/packer-plugin-amazon-ebs.zip -d ~/.packer.d/plugins/
+          rm ~/.packer.d/plugins/packer-plugin-amazon-ebs.zip
 
       - name: Force Format File
         run: packer fmt packer/packer.pkr.hcl
@@ -42,9 +43,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "us-east-1"
         run: |
-          packer build packer/packer.json | tee packer-output.log
+          packer build packer/packer.pkr.hcl | tee packer-output.log
           AMI_ID=$(grep -oP '(ami-[a-zA-Z0-9]+)' packer-output.log | tail -1)
-          echo "::set-output name=ami_id::$AMI_ID"
+          echo "ami_id=$AMI_ID" >> $GITHUB_OUTPUT
 
       - name: Store AMI ID in GitHub Secrets
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
