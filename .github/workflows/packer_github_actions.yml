@@ -31,6 +31,12 @@ jobs:
       - name: Validate Packer Template
         run: packer validate packer/packer.pkr.hcl
 
+      - name: Debug
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Event action: ${{ github.event.action }}"
+          echo "PR merged: ${{ github.event.pull_request.merged }}"
+
       - name: Build Packer AMI (Only on Merge)
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
         id: build-ami
